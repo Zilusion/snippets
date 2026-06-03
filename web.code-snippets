@@ -1,0 +1,1743 @@
+{
+    "PHP escape helper": {
+        "prefix": "fn-e",
+        "body": [
+            "function e(\\$value)",
+            "{",
+            "  return htmlspecialchars(\\$value, ENT_QUOTES, \"UTF-8\");",
+            "}"
+        ],
+        "description": "HTML escaping helper with quotes and UTF-8."
+    },
+    "PHP redirect helper": {
+        "prefix": "fn-redirect",
+        "body": [
+            "function redirect(\\$url)",
+            "{",
+            "  header(\"Location: \\$url\");",
+            "  exit;",
+            "}"
+        ],
+        "description": "Redirect helper."
+    },
+    "PHP isPost helper": {
+        "prefix": "fn-ispost",
+        "body": [
+            "function isPost()",
+            "{",
+            "  return \\$_SERVER[\"REQUEST_METHOD\"] === \"POST\";",
+            "}"
+        ],
+        "description": "POST request helper."
+    },
+    "PHP post helper": {
+        "prefix": "fn-post",
+        "body": [
+            "function post(\\$key)",
+            "{",
+            "  return trim(\\$_POST[\\$key] ?? \"\");",
+            "}"
+        ],
+        "description": "Read POST value."
+    },
+    "PHP errorText helper": {
+        "prefix": "fn-error",
+        "body": [
+            "function errorText(\\$errors, \\$name)",
+            "{",
+            "  return e(\\$errors[\\$name] ?? \"\");",
+            "}"
+        ],
+        "description": "Read error text by field name."
+    },
+    "PHP navLink helper": {
+        "prefix": "fn-navlink",
+        "body": [
+            "function navLink(\\$url, \\$text)",
+            "{",
+            "  \\$currentPage = basename(\\$_SERVER[\"SCRIPT_NAME\"]);",
+            "",
+            "  if (\\$url === \\$currentPage) {",
+            "    echo \"<span>\" . e(\\$text) . \"</span>\";",
+            "  } else {",
+            "    echo \"<a href=\\\"\" . e(\\$url) . \"\\\">\" . e(\\$text) . \"</a>\";",
+            "  }",
+            "}"
+        ],
+        "description": "Render active or linked navigation item."
+    },
+    "PHP selected helper": {
+        "prefix": "fn-selected",
+        "body": [
+            "function selected(\\$a, \\$b)",
+            "{",
+            "  return \\$a === \\$b ? \"selected\" : \"\";",
+            "}"
+        ],
+        "description": "Return selected attribute."
+    },
+    "PHP checked helper": {
+        "prefix": "fn-checked",
+        "body": [
+            "function checked(\\$a, \\$b)",
+            "{",
+            "  return \\$a === \\$b ? \"checked\" : \"\";",
+            "}"
+        ],
+        "description": "Return checked attribute."
+    },
+    "PHP session start": {
+        "prefix": "php-session",
+        "body": [
+            "session_start();"
+        ],
+        "description": "Start PHP session."
+    },
+    "PHP require once": {
+        "prefix": "php-require",
+        "body": [
+            "require_once __DIR__ . \"/$1\";"
+        ],
+        "description": "require_once with __DIR__."
+    },
+    "PHP require": {
+        "prefix": "php-include",
+        "body": [
+            "require __DIR__ . \"/$1\";"
+        ],
+        "description": "require with __DIR__."
+    },
+    "PHP config load and database": {
+        "prefix": "php-config-load",
+        "body": [
+            "\\$config = require __DIR__ . \"/config.php\";",
+            "",
+            "\\$db = new Database(\\$config);"
+        ],
+        "description": "Load config and create Database instance."
+    },
+    "PHP session value from row": {
+        "prefix": "php-session-row",
+        "body": [
+            "\\$_SESSION[\"$1\"] = \\$$2[\"$3\"];"
+        ],
+        "description": "Write one session value from an associative row."
+    },
+    "PHP session values block": {
+        "prefix": "php-session-values",
+        "body": [
+            "\\$_SESSION[\"$1\"] = $2;",
+            "\\$_SESSION[\"$3\"] = $4;"
+        ],
+        "description": "Write two arbitrary session values."
+    },
+    "PHP logout block": {
+        "prefix": "php-logout",
+        "body": [
+            "\\$_SESSION = [];",
+            "session_destroy();",
+            "redirect(\"login.php\");"
+        ],
+        "description": "Destroy session and redirect."
+    },
+    "PHP password hash": {
+        "prefix": "php-hash",
+        "body": [
+            "password_hash(\\$password, PASSWORD_DEFAULT)"
+        ],
+        "description": "Hash password."
+    },
+    "PHP password verify": {
+        "prefix": "php-verify",
+        "body": [
+            "password_verify(\\$$1, \\$$2[\"$3\"])"
+        ],
+        "description": "Verify a password against a hash from a row."
+    },
+    "PHP raw redirect": {
+        "prefix": "php-header",
+        "body": [
+            "header(\"Location: $1.php\");",
+            "exit;"
+        ],
+        "description": "Raw redirect."
+    },
+    "PHP config array": {
+        "prefix": "php-config",
+        "body": [
+            "<?php",
+            "",
+            "return [",
+            "  \"host\" => \"127.0.0.1\",",
+            "  \"dbname\" => \"$1\",",
+            "  \"user\" => \"root\",",
+            "  \"password\" => \"\",",
+            "];"
+        ],
+        "description": "Basic DB config array."
+    },
+    "PHP PDO connect": {
+        "prefix": "php-pdo",
+        "body": [
+            "\\$pdo = new PDO(\"mysql:host=127.0.0.1;dbname=$1;charset=utf8mb4\", \"root\", \"\");"
+        ],
+        "description": "Create PDO connection."
+    },
+    "PHP PDO DSN from config": {
+        "prefix": "php-dsn",
+        "body": [
+            "\\$dsn = \"mysql:host=\" . \\$config[\"host\"] . \";dbname=\" . \\$config[\"dbname\"] . \";charset=utf8mb4\";"
+        ],
+        "description": "Build MySQL DSN from config."
+    },
+    "PHP PDO prepare": {
+        "prefix": "php-prepare",
+        "body": [
+            "\\$stmt = \\$pdo->prepare(\"$1\");"
+        ],
+        "description": "PDO prepare."
+    },
+    "PHP PDO execute": {
+        "prefix": "php-execute",
+        "body": [
+            "\\$stmt->execute([$1]);"
+        ],
+        "description": "PDO execute."
+    },
+    "PHP PDO fetch": {
+        "prefix": "php-fetch",
+        "body": [
+            "\\$row = \\$stmt->fetch();"
+        ],
+        "description": "PDO fetch one."
+    },
+    "PHP PDO fetch all": {
+        "prefix": "php-fetchall",
+        "body": [
+            "\\$rows = \\$stmt->fetchAll();"
+        ],
+        "description": "PDO fetch all."
+    },
+    "PHP DB class shell": {
+        "prefix": "php-db-class",
+        "body": [
+            "class Database",
+            "{",
+            "  private \\$pdo;",
+            "",
+            "  $1",
+            "}"
+        ],
+        "description": "Simple Database class shell."
+    },
+    "PHP DB constructor": {
+        "prefix": "php-db-construct",
+        "body": [
+            "function __construct(\\$config)",
+            "{",
+            "  \\$dsn = \"mysql:host={\\$config['host']};dbname={\\$config['dbname']};charset=utf8mb4\";",
+            "  \\$this->pdo = new PDO(\\$dsn, \\$config['user'], \\$config['password']);",
+            "}"
+        ],
+        "description": "PDO constructor for simple Database class."
+    },
+    "PHP DB one method": {
+        "prefix": "php-db-one",
+        "body": [
+            "function one(\\$sql, \\$params = [])",
+            "{",
+            "  \\$stmt = \\$this->pdo->prepare(\\$sql);",
+            "  \\$stmt->execute(\\$params);",
+            "",
+            "  return \\$stmt->fetch();",
+            "}"
+        ],
+        "description": "one() method for simple DB class."
+    },
+    "PHP DB all method": {
+        "prefix": "php-db-all",
+        "body": [
+            "function all(\\$sql, \\$params = [])",
+            "{",
+            "  \\$stmt = \\$this->pdo->prepare(\\$sql);",
+            "  \\$stmt->execute(\\$params);",
+            "",
+            "  return \\$stmt->fetchAll();",
+            "}"
+        ],
+        "description": "all() method for simple DB class."
+    },
+    "PHP DB run method": {
+        "prefix": "php-db-run",
+        "body": [
+            "function run(\\$sql, \\$params = [])",
+            "{",
+            "  \\$stmt = \\$this->pdo->prepare(\\$sql);",
+            "  \\$stmt->execute(\\$params);",
+            "}"
+        ],
+        "description": "run() method for simple DB class."
+    },
+    "PHP DB run call": {
+        "prefix": "php-run",
+        "body": [
+            "\\$db->run(",
+            "  \"$1\",",
+            "  [$2]",
+            ");"
+        ],
+        "description": "Call DB run method."
+    },
+    "PHP DB one call": {
+        "prefix": "php-one",
+        "body": [
+            "\\$$1 = \\$db->one(",
+            "  \"$2\",",
+            "  [$3]",
+            ");"
+        ],
+        "description": "Call DB one method."
+    },
+    "PHP DB all call": {
+        "prefix": "php-all",
+        "body": [
+            "\\$$1 = \\$db->all(",
+            "  \"$2\",",
+            "  [$3]",
+            ");"
+        ],
+        "description": "Call DB all method."
+    },
+    "PHP page skeleton": {
+        "prefix": "php-page",
+        "body": [
+            "<?php",
+            "require_once __DIR__ . \"/core/init.php\";",
+            "",
+            "\\$pageTitle = \"$1\";",
+            "",
+            "require __DIR__ . \"/includes/page-header.php\";",
+            "?>",
+            "",
+            "<section>",
+            "  <h1>$1</h1>",
+            "  <p>$2</p>",
+            "</section>",
+            "",
+            "<?php require __DIR__ . \"/includes/page-footer.php\"; ?>"
+        ],
+        "description": "Generic PHP page skeleton."
+    },
+    "PHP POST block": {
+        "prefix": "php-post",
+        "body": [
+            "if (isPost()) {",
+            "  $1",
+            "}"
+        ],
+        "description": "if isPost block."
+    },
+    "PHP POST variable": {
+        "prefix": "php-post-var",
+        "body": [
+            "\\$$1 = post(\"$2\");"
+        ],
+        "description": "Read one POST value into a variable."
+    },
+    "PHP if no errors": {
+        "prefix": "php-no-errors",
+        "body": [
+            "if (!\\$errors) {",
+            "  $1",
+            "}"
+        ],
+        "description": "Run code if errors array is empty."
+    },
+    "PHP redirect call": {
+        "prefix": "php-redirect-call",
+        "body": [
+            "redirect(\"$1.php\");"
+        ],
+        "description": "Call redirect helper for a PHP page."
+    },
+    "PHP if": {
+        "prefix": "php-if",
+        "body": [
+            "<?php if ($1): ?>",
+            "  $2",
+            "<?php endif; ?>"
+        ],
+        "description": "PHP if block in HTML."
+    },
+    "PHP if else": {
+        "prefix": "php-ifelse",
+        "body": [
+            "<?php if ($1): ?>",
+            "  $2",
+            "<?php else: ?>",
+            "  $3",
+            "<?php endif; ?>"
+        ],
+        "description": "PHP if/else block in HTML."
+    },
+    "PHP foreach": {
+        "prefix": "php-foreach",
+        "body": [
+            "<?php foreach (\\$$1 as \\$$2): ?>",
+            "  $3",
+            "<?php endforeach; ?>"
+        ],
+        "description": "PHP foreach in HTML."
+    },
+    "HTML post form": {
+        "prefix": "html-form",
+        "body": [
+            "<form method=\"post\">",
+            "  $1",
+            "",
+            "  <button type=\"submit\">$2</button>",
+            "</form>"
+        ],
+        "description": "POST form."
+    },
+    "HTML page hero": {
+        "prefix": "html-page-hero",
+        "body": [
+            "<section class=\"page-hero\">",
+            "  <p class=\"eyebrow\">$1</p>",
+            "  <h1>$2</h1>",
+            "  <p class=\"page-lead\">",
+            "    $3",
+            "  </p>",
+            "</section>"
+        ],
+        "description": "Generic page hero section."
+    },
+    "HTML empty state": {
+        "prefix": "html-empty-state",
+        "body": [
+            "<p class=\"empty-state\">$1</p>"
+        ],
+        "description": "Generic empty state text."
+    },
+    "HTML input field": {
+        "prefix": "html-field",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"$2\"",
+            "    name=\"$3\"",
+            "    required",
+            "    data-error=\"$4\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$3\">",
+            "    <?= errorText(\\$errors, \"$3\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Input field with validation message."
+    },
+    "HTML input field with value": {
+        "prefix": "html-field-value",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"$2\"",
+            "    name=\"$3\"",
+            "    value=\"<?= e(\\$$4) ?>\"",
+            "    required",
+            "    data-error=\"$5\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$3\">",
+            "    <?= errorText(\\$errors, \"$3\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Input field with value and validation message."
+    },
+    "HTML input field with placeholder": {
+        "prefix": "html-field-placeholder",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"$2\"",
+            "    name=\"$3\"",
+            "    placeholder=\"$4\"",
+            "    required",
+            "    data-error=\"$5\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$3\">",
+            "    <?= errorText(\\$errors, \"$3\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Input field with placeholder and validation message."
+    },
+    "HTML full input field": {
+        "prefix": "html-field-full",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"$2\"",
+            "    name=\"$3\"",
+            "    value=\"<?= e(\\$$4) ?>\"",
+            "    placeholder=\"$5\"",
+            "    minlength=\"$6\"",
+            "    pattern=\"$7\"",
+            "    required",
+            "    data-error=\"$8\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$3\">",
+            "    <?= errorText(\\$errors, \"$3\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Full input field with value, placeholder, minlength, pattern and validation message."
+    },
+    "HTML number field": {
+        "prefix": "html-number-field",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"number\"",
+            "    name=\"$2\"",
+            "    min=\"$3\"",
+            "    max=\"$4\"",
+            "    step=\"$5\"",
+            "    placeholder=\"$6\"",
+            "    required",
+            "    data-error=\"$7\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$2\">",
+            "    <?= errorText(\\$errors, \"$2\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Number input field with min, max, step, placeholder and validation message."
+    },
+    "HTML date field": {
+        "prefix": "html-date-field",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <input",
+            "    type=\"date\"",
+            "    name=\"$2\"",
+            "    value=\"<?= e(\\$$3) ?>\"",
+            "    required",
+            "    data-error=\"$4\"",
+            "  >",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$2\">",
+            "    <?= errorText(\\$errors, \"$2\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Date input with preserved value and validation message."
+    },
+    "HTML select field": {
+        "prefix": "html-select",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <select name=\"$2\" required data-error=\"$3\">",
+            "    <option value=\"\" disabled selected>$4</option>",
+            "    $5",
+            "  </select>",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$2\">",
+            "    <?= errorText(\\$errors, \"$2\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Select field with validation message."
+    },
+    "HTML option from row": {
+        "prefix": "html-option-row",
+        "body": [
+            "<option value=\"<?= e(\\$$1['$2']) ?>\"><?= e(\\$$1['$3']) ?></option>"
+        ],
+        "description": "Option element using fields from a loop row."
+    },
+    "HTML textarea field": {
+        "prefix": "html-textarea",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <textarea",
+            "    name=\"$2\"",
+            "    required",
+            "    data-error=\"$3\"",
+            "  ></textarea>",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$2\">",
+            "    <?= errorText(\\$errors, \"$2\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Textarea field with validation message."
+    },
+    "HTML textarea field with value": {
+        "prefix": "html-textarea-value",
+        "body": [
+            "<label>",
+            "  $1",
+            "",
+            "  <textarea",
+            "    name=\"$2\"",
+            "    placeholder=\"$3\"",
+            "    required",
+            "    data-error=\"$4\"",
+            "  ><?= e(\\$$5) ?></textarea>",
+            "",
+            "  <small class=\"field-error\" data-error-for=\"$2\">",
+            "    <?= errorText(\\$errors, \"$2\") ?>",
+            "  </small>",
+            "</label>"
+        ],
+        "description": "Textarea field with preserved value, placeholder and validation message."
+    },
+    "HTML hidden input": {
+        "prefix": "html-hidden",
+        "body": [
+            "<input type=\"hidden\" name=\"$1\" value=\"<?= e(\\$$2) ?>\">"
+        ]
+    },
+    "HTML table": {
+        "prefix": "html-table",
+        "body": [
+            "<table>",
+            "  <thead>",
+            "    <tr>",
+            "      <th>$1</th>",
+            "    </tr>",
+            "  </thead>",
+            "",
+            "  <tbody>",
+            "    $2",
+            "  </tbody>",
+            "</table>"
+        ],
+        "description": "Table skeleton."
+    },
+    "HTML slider": {
+        "prefix": "html-slider",
+        "body": [
+            "<div class=\"slider\">",
+            "  <div class=\"slider-images\">",
+            "    <img class=\"slider-image\" src=\"assets/images/slide-1.webp\" alt=\"$1\">",
+            "    <img class=\"slider-image\" src=\"assets/images/slide-2.webp\" alt=\"$2\" hidden>",
+            "    <img class=\"slider-image\" src=\"assets/images/slide-3.webp\" alt=\"$3\" hidden>",
+            "    <img class=\"slider-image\" src=\"assets/images/slide-4.webp\" alt=\"$4\" hidden>",
+            "  </div>",
+            "",
+            "  <div class=\"slider-controls\">",
+            "    <button class=\"slider-button slider-button--previous\" type=\"button\" aria-label=\"Предыдущий слайд\">&lt;</button>",
+            "    <button class=\"slider-button slider-button--next\" type=\"button\" aria-label=\"Следующий слайд\">&gt;</button>",
+            "  </div>",
+            "</div>"
+        ],
+        "description": "Generic four-image slider markup."
+    },
+    "SQL create database": {
+        "prefix": "sql-db",
+        "body": [
+            "CREATE DATABASE IF NOT EXISTS $1 DEFAULT CHARSET=utf8mb4;",
+            "USE $1;"
+        ],
+        "description": "Create and use database."
+    },
+    "SQL drop table": {
+        "prefix": "sql-drop",
+        "body": [
+            "DROP TABLE IF EXISTS $1;"
+        ]
+    },
+    "SQL create table": {
+        "prefix": "sql-table",
+        "body": [
+            "CREATE TABLE $1 (",
+            "    id INT AUTO_INCREMENT PRIMARY KEY,",
+            "    $2",
+            ") ENGINE=InnoDB;"
+        ],
+        "description": "Create table."
+    },
+    "SQL varchar field": {
+        "prefix": "sql-varchar",
+        "body": [
+            "$1 VARCHAR($2) NOT NULL"
+        ]
+    },
+    "SQL text field": {
+        "prefix": "sql-text",
+        "body": [
+            "$1 TEXT NOT NULL"
+        ]
+    },
+    "SQL int field": {
+        "prefix": "sql-int",
+        "body": [
+            "$1 INT NOT NULL"
+        ]
+    },
+    "SQL date field": {
+        "prefix": "sql-date",
+        "body": [
+            "$1 DATE NOT NULL"
+        ]
+    },
+    "SQL varchar default field": {
+        "prefix": "sql-varchar-default",
+        "body": [
+            "$1 VARCHAR($2) NOT NULL DEFAULT '$3'"
+        ],
+        "description": "VARCHAR field with default value."
+    },
+    "SQL foreign key": {
+        "prefix": "sql-fk",
+        "body": [
+            "FOREIGN KEY ($1_id) REFERENCES $1(id) ON DELETE CASCADE"
+        ],
+        "description": "Foreign key with cascade."
+    },
+    "SQL insert": {
+        "prefix": "sql-insert",
+        "body": [
+            "INSERT INTO $1 ($2)",
+            "VALUES ($3)"
+        ]
+    },
+    "SQL select all": {
+        "prefix": "sql-select",
+        "body": [
+            "SELECT * FROM $1",
+            "ORDER BY id DESC"
+        ]
+    },
+    "SQL order by desc": {
+        "prefix": "sql-order-desc",
+        "body": [
+            "ORDER BY $1 DESC"
+        ],
+        "description": "ORDER BY descending clause."
+    },
+    "SQL select one": {
+        "prefix": "sql-one",
+        "body": [
+            "SELECT * FROM $1 WHERE $2 = ?"
+        ]
+    },
+    "SQL update": {
+        "prefix": "sql-update",
+        "body": [
+            "UPDATE $1 SET $2 = ? WHERE id = ?"
+        ]
+    },
+    "SQL delete": {
+        "prefix": "sql-delete",
+        "body": [
+            "DELETE FROM $1 WHERE id = ?"
+        ]
+    },
+    "SQL count": {
+        "prefix": "sql-count",
+        "body": [
+            "SELECT COUNT(*) AS total FROM $1 $2"
+        ]
+    },
+    "SQL join": {
+        "prefix": "sql-join",
+        "body": [
+            "JOIN $1 ON $1.id = $2.$1_id"
+        ]
+    },
+    "SQL left join": {
+        "prefix": "sql-left",
+        "body": [
+            "LEFT JOIN $1 ON $1.$2_id = $2.id"
+        ]
+    },
+    "SQL joined select": {
+        "prefix": "sql-select-join",
+        "body": [
+            "SELECT $1.*, $2.$3",
+            "FROM $1",
+            "JOIN $2 ON $2.id = $1.$2_id",
+            "WHERE $1.$4 = ?",
+            "ORDER BY $1.id DESC"
+        ]
+    },
+    "SQL pagination limit": {
+        "prefix": "sql-limit",
+        "body": [
+            "LIMIT $1 OFFSET $2"
+        ]
+    },
+    "PHP GET filter": {
+        "prefix": "php-filter",
+        "body": [
+            "\\$filter = \\$_GET[\"$1\"] ?? \"\";",
+            "\\$where = \\$filter ? \"WHERE $2.$1 = '\\$filter'\" : \"\";"
+        ],
+        "description": "Build a simple WHERE clause from a GET parameter."
+    },
+    "PHP pagination variables": {
+        "prefix": "php-pagination",
+        "body": [
+            "\\$perPage = 5;",
+            "\\$page = \\$_GET[\"page\"] ?? 1;",
+            "\\$offset = (\\$page - 1) * \\$perPage;",
+            "",
+            "\\$totalPages = ceil(",
+            "  \\$db->one(\"SELECT COUNT(*) AS total FROM $1 \\$where\")[\"total\"] / \\$perPage",
+            ");"
+        ],
+        "description": "Pagination variables for a table and optional $where."
+    },
+    "PHP count total": {
+        "prefix": "php-count-total",
+        "body": [
+            "\\$total = \\$db->one(\"SELECT COUNT(*) AS total FROM $1 \\$where\")[\"total\"];"
+        ],
+        "description": "Read COUNT(*) AS total using optional $where."
+    },
+    "HTML pagination": {
+        "prefix": "html-pagination",
+        "body": [
+            "<?php if (\\$totalPages > 1): ?>",
+            "  <div class=\"pagination\">",
+            "    <?php for (\\$i = 1; \\$i <= \\$totalPages; \\$i++): ?>",
+            "      <a",
+            "        href=\"$1.php?page=<?= \\$i ?>\"",
+            "        class=\"<?= \\$page == \\$i ? \"active\" : \"\" ?>\"",
+            "      >",
+            "        <?= \\$i ?>",
+            "      </a>",
+            "    <?php endfor; ?>",
+            "  </div>",
+            "<?php endif; ?>"
+        ],
+        "description": "Basic pagination links without a hardcoded filter name."
+    },
+    "HTML pagination with query value": {
+        "prefix": "html-pagination-query",
+        "body": [
+            "<?php if (\\$totalPages > 1): ?>",
+            "  <div class=\"pagination\">",
+            "    <?php for (\\$i = 1; \\$i <= \\$totalPages; \\$i++): ?>",
+            "      <a",
+            "        href=\"$1.php?$2=<?= e(\\$$3) ?>&amp;page=<?= \\$i ?>\"",
+            "        class=\"<?= \\$page == \\$i ? \"active\" : \"\" ?>\"",
+            "      >",
+            "        <?= \\$i ?>",
+            "      </a>",
+            "    <?php endfor; ?>",
+            "  </div>",
+            "<?php endif; ?>"
+        ],
+        "description": "Pagination links with one query parameter."
+    },
+    "PHP toast set": {
+        "prefix": "php-toast-set",
+        "body": [
+            "\\$_SESSION[\"message\"] = \"$1\";"
+        ]
+    },
+    "PHP toast show": {
+        "prefix": "php-toast-show",
+        "body": [
+            "<?php if (isset(\\$_SESSION[\"message\"])): ?>",
+            "  <p class=\"toast\"><?= e(\\$_SESSION[\"message\"]) ?></p>",
+            "  <?php unset(\\$_SESSION[\"message\"]); ?>",
+            "<?php endif; ?>"
+        ]
+    },
+    "JS validation": {
+        "prefix": "js-validation",
+        "body": [
+            "document.querySelectorAll(\"form\").forEach((form) => {",
+            "  form.noValidate = true;",
+            "",
+            "  form.addEventListener(\"submit\", (event) => {",
+            "    let isValid = true;",
+            "",
+            "    form.querySelectorAll(\"input, select, textarea\").forEach((field) => {",
+            "      const error = form.querySelector('[data-error-for=\"' + field.name + '\"]');",
+            "",
+            "      if (!error) {",
+            "        return;",
+            "      }",
+            "",
+            "      error.textContent = \"\";",
+            "",
+            "      if (!field.checkValidity()) {",
+            "        isValid = false;",
+            "        error.textContent = field.dataset.error || field.validationMessage;",
+            "      }",
+            "    });",
+            "",
+            "    if (!isValid) {",
+            "      event.preventDefault();",
+            "    }",
+            "  });",
+            "});"
+        ],
+        "description": "Universal client-side validation."
+    },
+    "JS slider": {
+        "prefix": "js-slider",
+        "body": [
+            "const slider = document.querySelector(\".slider\");",
+            "",
+            "if (slider) {",
+            "  const images = slider.querySelectorAll(\".slider-image\");",
+            "  const prevButton = slider.querySelector(\".slider-button--previous\");",
+            "  const nextButton = slider.querySelector(\".slider-button--next\");",
+            "",
+            "  let activeIndex = 0;",
+            "",
+            "  function showSlide(index) {",
+            "    images.forEach((image, i) => {",
+            "      image.hidden = i !== index;",
+            "    });",
+            "  }",
+            "",
+            "  function nextSlide() {",
+            "    activeIndex++;",
+            "",
+            "    if (activeIndex >= images.length) {",
+            "      activeIndex = 0;",
+            "    }",
+            "",
+            "    showSlide(activeIndex);",
+            "  }",
+            "",
+            "  function prevSlide() {",
+            "    activeIndex--;",
+            "",
+            "    if (activeIndex < 0) {",
+            "      activeIndex = images.length - 1;",
+            "    }",
+            "",
+            "    showSlide(activeIndex);",
+            "  }",
+            "",
+            "  nextButton.addEventListener(\"click\", nextSlide);",
+            "  prevButton.addEventListener(\"click\", prevSlide);",
+            "",
+            "  setInterval(nextSlide, 3000);",
+            "}"
+        ],
+        "description": "Universal image slider."
+    },
+    "HTML select option selected": {
+        "prefix": "html-option-selected",
+        "body": [
+            "<option value=\"$1\" <?= \\$$2 === \"$1\" ? \"selected\" : \"\" ?>>$3</option>"
+        ],
+        "description": "Option with selected state."
+    },
+    "HTML section header": {
+        "prefix": "html-section-header",
+        "body": [
+            "<div class=\"section-header\">",
+            "  <p class=\"eyebrow\">$1</p>",
+            "  <h2>$2</h2>",
+            "  <p>$3</p>",
+            "</div>"
+        ],
+        "description": "Reusable section heading block."
+    },
+    "HTML card grid": {
+        "prefix": "html-card-grid",
+        "body": [
+            "<div class=\"content-grid\">",
+            "  <article class=\"info-card\">",
+            "    <span class=\"card-number\">01</span>",
+            "    <h3>$1</h3>",
+            "    <p>$2</p>",
+            "  </article>",
+            "",
+            "  <article class=\"info-card\">",
+            "    <span class=\"card-number\">02</span>",
+            "    <h3>$3</h3>",
+            "    <p>$4</p>",
+            "  </article>",
+            "",
+            "  <article class=\"info-card\">",
+            "    <span class=\"card-number\">03</span>",
+            "    <h3>$5</h3>",
+            "    <p>$6</p>",
+            "  </article>",
+            "</div>"
+        ],
+        "description": "Three generic information cards."
+    },
+    "HTML metric grid": {
+        "prefix": "html-metric-grid",
+        "body": [
+            "<div class=\"metric-grid\">",
+            "  <article class=\"metric-card\">",
+            "    <span class=\"metric-value\"><?= e(\\$$1) ?></span>",
+            "    <span>$2</span>",
+            "  </article>",
+            "",
+            "  <article class=\"metric-card\">",
+            "    <span class=\"metric-value\"><?= e(\\$$3) ?></span>",
+            "    <span>$4</span>",
+            "  </article>",
+            "</div>"
+        ],
+        "description": "Generic metric cards."
+    },
+    "HTML button link": {
+        "prefix": "html-button-link",
+        "body": [
+            "<a class=\"button-link\" href=\"$1.php\">$2</a>"
+        ],
+        "description": "Primary link styled as a button."
+    },
+    "HTML secondary link": {
+        "prefix": "html-secondary-link",
+        "body": [
+            "<a class=\"secondary-link\" href=\"$1.php\">$2</a>"
+        ],
+        "description": "Secondary action link."
+    },
+    "CSS full exam base": {
+        "prefix": "css-full",
+        "body": [
+            ":root {",
+            "  --accent: #263142;",
+            "  --accent-dark: #111827;",
+            "  --accent-soft: #eef2f6;",
+            "  --success: #1d6f5b;",
+            "  --warning: #9a6416;",
+            "  --danger: #b9404c;",
+            "  --text: #172033;",
+            "  --muted: #697386;",
+            "  --line: #d9e0ea;",
+            "  --line-strong: #c7d0dd;",
+            "  --bg: #f3f5f8;",
+            "  --surface: #ffffff;",
+            "  --surface-soft: #f9fbfd;",
+            "  --radius: 8px;",
+            "  --shadow: 0 18px 42px rgba(29, 41, 57, 0.1);",
+            "  --shadow-soft: 0 10px 24px rgba(29, 41, 57, 0.07);",
+            "}",
+            "",
+            "* {",
+            "  box-sizing: border-box;",
+            "}",
+            "",
+            "html {",
+            "  scroll-behavior: smooth;",
+            "}",
+            "",
+            "body {",
+            "  margin: 0;",
+            "  min-height: 100vh;",
+            "  color: var(--text);",
+            "  background:",
+            "    linear-gradient(180deg, #e9eef5 0, rgba(243, 245, 248, 0) 320px), var(--bg);",
+            "  font:",
+            "    16px/1.55 Arial,",
+            "    \"Helvetica Neue\",",
+            "    sans-serif;",
+            "}",
+            "",
+            "body::selection {",
+            "  background: rgba(38, 49, 66, 0.18);",
+            "}",
+            "",
+            "a {",
+            "  color: var(--accent);",
+            "  font-weight: 700;",
+            "  text-decoration: none;",
+            "  text-underline-offset: 4px;",
+            "  transition:",
+            "    color 0.18s ease,",
+            "    background-color 0.18s ease,",
+            "    border-color 0.18s ease;",
+            "}",
+            "",
+            "a:hover {",
+            "  color: var(--accent-dark);",
+            "  text-decoration: underline;",
+            "}",
+            "",
+            "a:focus-visible,",
+            "button:focus-visible,",
+            "input:focus-visible,",
+            "select:focus-visible,",
+            "textarea:focus-visible {",
+            "  outline: 3px solid rgba(38, 49, 66, 0.22);",
+            "  outline-offset: 3px;",
+            "}",
+            "",
+            "header {",
+            "  position: sticky;",
+            "  top: 0;",
+            "  z-index: 10;",
+            "  background: rgba(255, 255, 255, 0.84);",
+            "  border-bottom: 1px solid rgba(217, 224, 234, 0.9);",
+            "  box-shadow: 0 8px 28px rgba(29, 41, 57, 0.08);",
+            "  backdrop-filter: blur(16px);",
+            "}",
+            "",
+            "nav,",
+            "main {",
+            "  width: min(1120px, calc(100% - 32px));",
+            "  margin: 0 auto;",
+            "}",
+            "",
+            "nav {",
+            "  display: flex;",
+            "  flex-wrap: wrap;",
+            "  gap: 8px;",
+            "  align-items: center;",
+            "  min-height: 68px;",
+            "  padding: 10px 0;",
+            "}",
+            "",
+            "nav a,",
+            "nav span {",
+            "  min-width: 0;",
+            "  padding: 9px 13px;",
+            "  border: 1px solid transparent;",
+            "  border-radius: var(--radius);",
+            "  color: var(--text);",
+            "  font-size: 14px;",
+            "  font-weight: 700;",
+            "  overflow-wrap: anywhere;",
+            "  text-align: center;",
+            "  transition:",
+            "    color 0.18s ease,",
+            "    background-color 0.18s ease,",
+            "    border-color 0.18s ease,",
+            "    box-shadow 0.18s ease,",
+            "    transform 0.18s ease;",
+            "}",
+            "",
+            "nav a:hover,",
+            "nav span {",
+            "  background: var(--accent);",
+            "  border-color: var(--accent);",
+            "  color: #fff;",
+            "  text-decoration: none;",
+            "  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.18);",
+            "}",
+            "",
+            "nav a:hover {",
+            "  transform: translateY(-1px);",
+            "}",
+            "",
+            "nav a[href=\"logout.php\"] {",
+            "  margin-left: auto;",
+            "}",
+            "",
+            "main {",
+            "  padding: 34px 0 58px;",
+            "}",
+            "",
+            "section {",
+            "  position: relative;",
+            "  margin: 0 0 22px;",
+            "  padding: 26px;",
+            "  overflow: hidden;",
+            "  background: linear-gradient(180deg, #fff 0, var(--surface-soft) 100%);",
+            "  border: 1px solid rgba(217, 224, 234, 0.95);",
+            "  border-radius: var(--radius);",
+            "  box-shadow: var(--shadow-soft);",
+            "}",
+            "",
+            "section::before {",
+            "  content: \"\";",
+            "  position: absolute;",
+            "  inset: 0 0 auto;",
+            "  height: 3px;",
+            "  background: var(--accent);",
+            "  opacity: 0.95;",
+            "}",
+            "",
+            "h1,",
+            "h2,",
+            "p {",
+            "  margin-top: 0;",
+            "}",
+            "",
+            "h1,",
+            "h2 {",
+            "  line-height: 1.15;",
+            "  letter-spacing: 0;",
+            "}",
+            "",
+            "h1 {",
+            "  margin-bottom: 20px;",
+            "  font-size: 40px;",
+            "}",
+            "",
+            "h2 {",
+            "  margin-bottom: 16px;",
+            "  font-size: 24px;",
+            "}",
+            "",
+            "p {",
+            "  color: var(--muted);",
+            "}",
+            "",
+            "p:last-child {",
+            "  margin-bottom: 0;",
+            "}",
+            "",
+            ".eyebrow {",
+            "  margin-bottom: 8px;",
+            "  color: var(--warning);",
+            "  font-size: 12px;",
+            "  font-weight: 800;",
+            "  letter-spacing: 0;",
+            "  text-transform: uppercase;",
+            "}",
+            "",
+            ".page-hero {",
+            "  padding: 32px;",
+            "}",
+            "",
+            ".page-hero--split {",
+            "  display: grid;",
+            "  grid-template-columns: minmax(260px, 0.85fr) minmax(360px, 1.15fr);",
+            "  gap: 28px;",
+            "  align-items: center;",
+            "}",
+            "",
+            ".page-lead {",
+            "  max-width: 720px;",
+            "  margin-bottom: 22px;",
+            "  color: #485467;",
+            "  font-size: 18px;",
+            "}",
+            "",
+            ".hero-copy {",
+            "  min-width: 0;",
+            "}",
+            "",
+            ".hero-actions {",
+            "  display: flex;",
+            "  flex-wrap: wrap;",
+            "  gap: 12px;",
+            "  align-items: center;",
+            "}",
+            "",
+            ".button-link,",
+            ".secondary-link {",
+            "  display: inline-flex;",
+            "  align-items: center;",
+            "  justify-content: center;",
+            "  min-height: 44px;",
+            "  padding: 11px 18px;",
+            "  border-radius: var(--radius);",
+            "  text-align: center;",
+            "  transition:",
+            "    color 0.18s ease,",
+            "    background-color 0.18s ease,",
+            "    border-color 0.18s ease,",
+            "    box-shadow 0.18s ease,",
+            "    transform 0.18s ease;",
+            "}",
+            "",
+            ".button-link {",
+            "  background: var(--accent);",
+            "  color: #fff;",
+            "  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.18);",
+            "}",
+            "",
+            ".button-link:hover {",
+            "  background: var(--accent-dark);",
+            "  color: #fff;",
+            "  text-decoration: none;",
+            "  transform: translateY(-1px);",
+            "}",
+            "",
+            ".secondary-link {",
+            "  border: 1px solid var(--line-strong);",
+            "  background: #fff;",
+            "  color: var(--accent);",
+            "}",
+            "",
+            ".secondary-link:hover {",
+            "  border-color: var(--accent);",
+            "  color: var(--accent-dark);",
+            "  text-decoration: none;",
+            "}",
+            "",
+            ".section-header {",
+            "  max-width: 780px;",
+            "  margin-bottom: 18px;",
+            "}",
+            "",
+            ".section-header p {",
+            "  margin-bottom: 0;",
+            "}",
+            "",
+            ".content-grid,",
+            ".metric-grid {",
+            "  display: grid;",
+            "  gap: 16px;",
+            "}",
+            "",
+            ".content-grid {",
+            "  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));",
+            "}",
+            "",
+            ".content-grid--compact {",
+            "  gap: 14px;",
+            "}",
+            "",
+            ".info-card,",
+            ".metric-card {",
+            "  min-width: 0;",
+            "  padding: 18px;",
+            "  border: 1px solid var(--line);",
+            "  border-radius: var(--radius);",
+            "  background: #fff;",
+            "  box-shadow: 0 8px 18px rgba(29, 41, 57, 0.05);",
+            "  transition:",
+            "    border-color 0.18s ease,",
+            "    box-shadow 0.18s ease,",
+            "    transform 0.18s ease;",
+            "}",
+            "",
+            ".info-card:hover,",
+            ".metric-card:hover {",
+            "  border-color: var(--line-strong);",
+            "  box-shadow: var(--shadow-soft);",
+            "  transform: translateY(-2px);",
+            "}",
+            "",
+            ".info-card h3 {",
+            "  margin: 0 0 8px;",
+            "  font-size: 18px;",
+            "  line-height: 1.25;",
+            "}",
+            "",
+            ".info-card p {",
+            "  margin-bottom: 0;",
+            "}",
+            "",
+            ".card-number {",
+            "  display: inline-flex;",
+            "  margin-bottom: 14px;",
+            "  color: var(--accent);",
+            "  font-size: 13px;",
+            "  font-weight: 800;",
+            "}",
+            "",
+            ".metric-grid {",
+            "  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));",
+            "  margin-top: 24px;",
+            "}",
+            "",
+            ".metric-card {",
+            "  display: grid;",
+            "  gap: 4px;",
+            "  color: var(--muted);",
+            "  font-weight: 700;",
+            "}",
+            "",
+            ".metric-value {",
+            "  color: var(--text);",
+            "  font-size: 30px;",
+            "  font-weight: 800;",
+            "  line-height: 1;",
+            "}",
+            "",
+            ".empty-state {",
+            "  padding: 16px 18px;",
+            "  border: 1px dashed var(--line-strong);",
+            "  border-radius: var(--radius);",
+            "  background: #fff;",
+            "}",
+            "",
+            "form {",
+            "  display: grid;",
+            "  gap: 16px;",
+            "  max-width: 590px;",
+            "}",
+            "",
+            ".filter {",
+            "  margin-bottom: 18px;",
+            "}",
+            "",
+            "td form {",
+            "  display: block;",
+            "  max-width: none;",
+            "}",
+            "",
+            "label {",
+            "  display: grid;",
+            "  gap: 7px;",
+            "  color: var(--text);",
+            "  font-weight: 700;",
+            "}",
+            "",
+            "input,",
+            "select,",
+            "textarea,",
+            "button {",
+            "  min-height: 44px;",
+            "  border-radius: var(--radius);",
+            "  font: inherit;",
+            "}",
+            "",
+            "input,",
+            "select,",
+            "textarea {",
+            "  width: 100%;",
+            "  padding: 10px 12px;",
+            "  border: 1px solid var(--line);",
+            "  background: #fff;",
+            "  color: var(--text);",
+            "  outline: 0;",
+            "  transition:",
+            "    border-color 0.18s ease,",
+            "    box-shadow 0.18s ease,",
+            "    background-color 0.18s ease;",
+            "}",
+            "",
+            "input:hover,",
+            "select:hover,",
+            "textarea:hover {",
+            "  border-color: var(--line-strong);",
+            "}",
+            "",
+            "input:focus,",
+            "select:focus,",
+            "textarea:focus {",
+            "  border-color: var(--accent);",
+            "  box-shadow: 0 0 0 4px rgba(38, 49, 66, 0.14);",
+            "}",
+            "",
+            "input::placeholder,",
+            "textarea::placeholder {",
+            "  color: #98a2b3;",
+            "}",
+            "",
+            "textarea {",
+            "  min-height: 124px;",
+            "  resize: vertical;",
+            "}",
+            "",
+            "button {",
+            "  width: fit-content;",
+            "  padding: 11px 18px;",
+            "  border: 0;",
+            "  background: var(--accent);",
+            "  color: #fff;",
+            "  cursor: pointer;",
+            "  font-weight: 700;",
+            "  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.18);",
+            "  transition:",
+            "    background-color 0.18s ease,",
+            "    box-shadow 0.18s ease,",
+            "    transform 0.18s ease,",
+            "    filter 0.18s ease;",
+            "}",
+            "",
+            "button:hover {",
+            "  background: var(--accent-dark);",
+            "  filter: none;",
+            "  box-shadow: 0 14px 26px rgba(17, 24, 39, 0.24);",
+            "  transform: translateY(-1px);",
+            "}",
+            "",
+            "button:active {",
+            "  box-shadow: 0 8px 16px rgba(17, 24, 39, 0.16);",
+            "  transform: translateY(0);",
+            "}",
+            "",
+            "small,",
+            ".field-error {",
+            "  min-height: 20px;",
+            "  color: var(--danger);",
+            "  font-size: 14px;",
+            "  font-weight: 700;",
+            "}",
+            "",
+            ".field-error:empty {",
+            "  display: none;",
+            "}",
+            "",
+            "table {",
+            "  width: 100%;",
+            "  overflow: hidden;",
+            "  border: 1px solid var(--line);",
+            "  border-collapse: separate;",
+            "  border-spacing: 0;",
+            "  border-radius: var(--radius);",
+            "  background: #fff;",
+            "  box-shadow: var(--shadow-soft);",
+            "}",
+            "",
+            "th,",
+            "td {",
+            "  padding: 14px;",
+            "  border-bottom: 1px solid var(--line);",
+            "  text-align: left;",
+            "  vertical-align: top;",
+            "}",
+            "",
+            "th {",
+            "  background: linear-gradient(180deg, #f2f6fc 0, #e9eef6 100%);",
+            "  color: #344054;",
+            "  font-size: 13px;",
+            "  font-weight: 800;",
+            "  text-transform: uppercase;",
+            "}",
+            "",
+            "td {",
+            "  color: #2d3648;",
+            "}",
+            "",
+            "tbody tr {",
+            "  transition: background-color 0.16s ease;",
+            "}",
+            "",
+            "tbody tr:hover {",
+            "  background: #f8fbff;",
+            "}",
+            "",
+            "tr:last-child td {",
+            "  border-bottom: 0;",
+            "}",
+            "",
+            "td select {",
+            "  min-width: 172px;",
+            "}",
+            "",
+            ".toast {",
+            "  position: fixed;",
+            "  right: 20px;",
+            "  bottom: 20px;",
+            "  z-index: 20;",
+            "  max-width: min(360px, calc(100% - 40px));",
+            "  margin: 0;",
+            "  padding: 14px 18px;",
+            "  border: 1px solid rgba(22, 138, 99, 0.28);",
+            "  border-radius: var(--radius);",
+            "  background: #ecfdf5;",
+            "  color: #075f45;",
+            "  box-shadow: var(--shadow);",
+            "  font-weight: 700;",
+            "}",
+            "",
+            ".slider {",
+            "  overflow: hidden;",
+            "  border: 1px solid var(--line);",
+            "  border-radius: var(--radius);",
+            "  background: #111827;",
+            "  box-shadow: var(--shadow);",
+            "  position: relative;",
+            "}",
+            "",
+            ".slider-images {",
+            "  height: clamp(260px, 45vw, 520px);",
+            "  background: #111827;",
+            "}",
+            "",
+            ".slider-image {",
+            "  width: 100%;",
+            "  height: 100%;",
+            "  object-fit: cover;",
+            "}",
+            "",
+            ".slider-controls,",
+            ".pagination {",
+            "  display: flex;",
+            "  flex-wrap: wrap;",
+            "  gap: 10px;",
+            "}",
+            "",
+            ".slider-controls {",
+            "  position: absolute;",
+            "  inset: 0;",
+            "  align-items: center;",
+            "  justify-content: space-between;",
+            "  padding: 18px;",
+            "  background: transparent;",
+            "  border: 0;",
+            "  pointer-events: none;",
+            "}",
+            "",
+            ".slider-button {",
+            "  display: grid;",
+            "  place-items: center;",
+            "  width: 46px;",
+            "  min-width: 46px;",
+            "  height: 46px;",
+            "  min-height: 46px;",
+            "  padding: 0;",
+            "  border: 1px solid rgba(255, 255, 255, 0.42);",
+            "  border-radius: 999px;",
+            "  background: rgba(17, 24, 39, 0.72);",
+            "  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.28);",
+            "  font-size: 22px;",
+            "  line-height: 1;",
+            "  pointer-events: auto;",
+            "  backdrop-filter: blur(8px);",
+            "}",
+            "",
+            ".slider-button:hover {",
+            "  background: rgba(17, 24, 39, 0.92);",
+            "}",
+            "",
+            ".pagination {",
+            "  padding-top: 16px;",
+            "}",
+            "",
+            ".pagination a {",
+            "  display: grid;",
+            "  place-items: center;",
+            "  min-width: 42px;",
+            "  min-height: 42px;",
+            "  border: 1px solid var(--line);",
+            "  border-radius: var(--radius);",
+            "  background: #fff;",
+            "  color: var(--text);",
+            "  box-shadow: 0 6px 14px rgba(29, 41, 57, 0.05);",
+            "  transition:",
+            "    color 0.18s ease,",
+            "    background-color 0.18s ease,",
+            "    border-color 0.18s ease,",
+            "    transform 0.18s ease,",
+            "    box-shadow 0.18s ease;",
+            "}",
+            "",
+            ".pagination a:hover,",
+            ".pagination a.active {",
+            "  background: var(--accent);",
+            "  border-color: var(--accent);",
+            "  color: #fff;",
+            "  text-decoration: none;",
+            "  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.18);",
+            "}",
+            "",
+            ".pagination a:hover {",
+            "  transform: translateY(-1px);",
+            "}",
+            "",
+            "@media (max-width: 900px) {",
+            "  nav,",
+            "  main {",
+            "    width: min(100% - 20px, 1120px);",
+            "  }",
+            "",
+            "  nav {",
+            "    gap: 6px;",
+            "  }",
+            "",
+            "  nav a,",
+            "  nav span {",
+            "    flex: 1 1 140px;",
+            "    padding: 8px;",
+            "  }",
+            "",
+            "  nav a[href=\"logout.php\"] {",
+            "    margin-left: 0;",
+            "  }",
+            "",
+            "  h1 {",
+            "    font-size: 32px;",
+            "  }",
+            "",
+            "  .page-hero--split,",
+            "  .content-grid,",
+            "  .metric-grid {",
+            "    grid-template-columns: 1fr;",
+            "  }",
+            "",
+            "  section {",
+            "    padding: 20px;",
+            "  }",
+            "",
+            "  table {",
+            "    display: block;",
+            "    overflow-x: auto;",
+            "    white-space: nowrap;",
+            "  }",
+            "",
+            "  .slider-button {",
+            "    flex: 0 0 auto;",
+            "  }",
+            "}",
+            "",
+            "@media (max-width: 520px) {",
+            "  body {",
+            "    font-size: 15px;",
+            "  }",
+            "",
+            "  main {",
+            "    padding: 20px 0 36px;",
+            "  }",
+            "",
+            "  section {",
+            "    padding: 18px;",
+            "  }",
+            "",
+            "  h1 {",
+            "    font-size: 28px;",
+            "  }",
+            "",
+            "  h2 {",
+            "    font-size: 21px;",
+            "  }",
+            "",
+            "  button {",
+            "    width: 100%;",
+            "  }",
+            "",
+            "  .hero-actions,",
+            "  .button-link,",
+            "  .secondary-link {",
+            "    width: 100%;",
+            "  }",
+            "",
+            "  .slider-controls {",
+            "    padding: 12px;",
+            "  }",
+            "",
+            "  .slider-button {",
+            "    width: 42px;",
+            "    min-width: 42px;",
+            "    height: 42px;",
+            "    min-height: 42px;",
+            "  }",
+            "",
+            "  .toast {",
+            "    right: 12px;",
+            "    bottom: 12px;",
+            "    max-width: calc(100% - 24px);",
+            "  }",
+            "}"
+        ],
+        "description": "Universal responsive portal CSS base."
+    }
+}
